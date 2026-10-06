@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Local notifications — phụ trách: Nguyễn Quốc Vương
+/// CT484 group project CafeSpot
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
