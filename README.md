@@ -1,31 +1,32 @@
-# CafeSpot — CT484 Nhóm Thông & Vương
+﻿# CafeSpot â€” CT484 NhÃ³m ThÃ´ng & VÆ°Æ¡ng
 
-Ứng dụng Flutter review quán cà phê (học phần CT484).
+á»¨ng dá»¥ng Flutter review quÃ¡n cÃ  phÃª (há»c pháº§n CT484).
 
-## Thành viên
+## ThÃ nh viÃªn
 
-| MSSV | Họ tên | Phụ trách chính |
+| MSSV | Há» tÃªn | Phá»¥ trÃ¡ch chÃ­nh |
 |------|--------|-----------------|
-| BK24V7X703 | Lưu Minh Thông | Home, Chi tiết quán, Form thêm/sửa, SQLite, go_router |
-| DC24V7X414 | Nguyễn Quốc Vương | Yêu thích, Đánh giá của tôi, Tìm kiếm, Cài đặt, Local notification |
+| BK24V7X703 | LÆ°u Minh ThÃ´ng | Home, Chi tiáº¿t quÃ¡n, Form thÃªm/sá»­a, SQLite, go_router |
+| DC24V7X414 | Äá»— ChÃ­ VÆ°Æ¡ng | YÃªu thÃ­ch, ÄÃ¡nh giÃ¡ cá»§a tÃ´i, TÃ¬m kiáº¿m, CÃ i Ä‘áº·t, Local notification |
 
-## Chạy dự án
+## Cháº¡y dá»± Ã¡n
 
 ```bash
 flutter pub get
 flutter run
 ```
 
-## Tính năng đáp ứng tiêu chí
+## TÃ­nh nÄƒng Ä‘Ã¡p á»©ng tiÃªu chÃ­
 
-- ≥ 6 màn hình, ListView/GridView, responsive
-- Điều hướng `go_router` (truyền dữ liệu + transition)
+- â‰¥ 6 mÃ n hÃ¬nh, ListView/GridView, responsive
+- Äiá»u hÆ°á»›ng `go_router` (truyá»n dá»¯ liá»‡u + transition)
 - State management: Provider
-- Lưu trữ SQLite (CRUD quán & đánh giá)
+- LÆ°u trá»¯ SQLite (CRUD quÃ¡n & Ä‘Ã¡nh giÃ¡)
 - Local notifications
-- Đổi tên app, icon, splash screen
+- Äá»•i tÃªn app, icon, splash screen
 
 ## Phan cong
 
 Xem file CONTRIBUTORS.md.
+
 
