@@ -10,7 +10,7 @@ from docx.shared import Cm, Pt
 from PIL import Image
 
 BASE = Path(__file__).resolve().parents[1]
-SHOT_SRC = Path(r"C:\Users\LOI~1.TRA\AppData\Local\Temp\cursor\screenshots")
+SHOT_SRC = BASE / "docs" / "screenshots" / "android"
 OUT_DIR = BASE / "docs" / "screenshots"
 REPORT_DIR = BASE / "docs"
 ROOT = BASE.parent
@@ -60,14 +60,14 @@ def crop_app(src: Path, dest: Path) -> Path:
 
 
 FILES = {
-    "splash": "page-2026-10-06T02-26-49-881Z.png",
-    "home": "01_home.png",
-    "favorites": "cafe_favorites.png",
-    "reviews": "cafe_reviews.png",
-    "search": "cafe_search.png",
-    "settings": "cafe_settings.png",
-    "detail": "cafe_detail.png",
-    "form": "cafe_form.png",
+    "splash": "splash.png",
+    "home": "home.png",
+    "favorites": "favorites.png",
+    "reviews": "reviews.png",
+    "search": "search.png",
+    "settings": "settings.png",
+    "detail": "detail.png",
+    "form": "form.png",
 }
 
 
