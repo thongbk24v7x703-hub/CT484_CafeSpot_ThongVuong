@@ -278,5 +278,8 @@ if __name__ == "__main__":
     ]:
         src = REPORT_DIR / name
         dst = ROOT / name
-        dst.write_bytes(src.read_bytes())
-        print("copied", dst)
+        try:
+            dst.write_bytes(src.read_bytes())
+            print("copied", dst)
+        except PermissionError:
+            print("SKIP locked", dst)
