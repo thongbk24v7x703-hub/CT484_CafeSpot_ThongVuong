@@ -24,3 +24,8 @@ flutter run
 - Lưu trữ SQLite (CRUD quán & đánh giá)
 - Local notifications
 - Đổi tên app, icon, splash screen
+
+## Phan cong
+
+Xem file CONTRIBUTORS.md.
+
