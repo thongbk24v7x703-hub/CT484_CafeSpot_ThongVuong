@@ -1,32 +1,32 @@
-﻿# CafeSpot â€” CT484 NhÃ³m ThÃ´ng & VÆ°Æ¡ng
+﻿# CafeSpot — CT484 Nhóm Thông & Vương
 
-á»¨ng dá»¥ng Flutter review quÃ¡n cÃ  phÃª (há»c pháº§n CT484).
+Ứng dụng Flutter review quán cà phê (học phần CT484).
 
-## ThÃ nh viÃªn
+**GitHub:** https://github.com/vuongdc24v7x414/CT484_CafeSpot_ThongVuong
 
-| MSSV | Há» tÃªn | Phá»¥ trÃ¡ch chÃ­nh |
+## Thành viên
+
+| MSSV | Họ tên | Phụ trách chính |
 |------|--------|-----------------|
-| BK24V7X703 | LÆ°u Minh ThÃ´ng | Home, Chi tiáº¿t quÃ¡n, Form thÃªm/sá»­a, SQLite, go_router |
-| DC24V7X414 | Äá»— ChÃ­ VÆ°Æ¡ng | YÃªu thÃ­ch, ÄÃ¡nh giÃ¡ cá»§a tÃ´i, TÃ¬m kiáº¿m, CÃ i Ä‘áº·t, Local notification |
+| BK24V7X703 | Lưu Minh Thông | Splash, Home, Chi tiết quán, Form thêm/sửa, SQLite, go_router |
+| DC24V7X414 | Nguyễn Quốc Vương | Yêu thích, Đánh giá của tôi, Tìm kiếm, Cài đặt, Local notification |
 
-## Cháº¡y dá»± Ã¡n
+## Chạy dự án
 
 ```bash
 flutter pub get
 flutter run
 ```
 
-## TÃ­nh nÄƒng Ä‘Ã¡p á»©ng tiÃªu chÃ­
+## Tính năng đáp ứng tiêu chí
 
-- â‰¥ 6 mÃ n hÃ¬nh, ListView/GridView, responsive
-- Äiá»u hÆ°á»›ng `go_router` (truyá»n dá»¯ liá»‡u + transition)
+- ≥ 6 màn hình, ListView/GridView, responsive
+- Điều hướng `go_router` (truyền dữ liệu + transition)
 - State management: Provider
-- LÆ°u trá»¯ SQLite (CRUD quÃ¡n & Ä‘Ã¡nh giÃ¡)
+- Lưu trữ SQLite (CRUD quán & đánh giá)
 - Local notifications
-- Äá»•i tÃªn app, icon, splash screen
+- Đổi tên app, icon, splash screen
 
-## Phan cong
+## Phân công
 
-Xem file CONTRIBUTORS.md.
-
-
+Xem file `CONTRIBUTORS.md`.
