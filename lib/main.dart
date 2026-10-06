@@ -10,7 +10,11 @@ import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService.instance.init();
+  try {
+    await NotificationService.instance.init();
+  } catch (_) {
+    // Web / desktop chưa cấu hình plugin notification vẫn chạy UI.
+  }
 
   final settings = SettingsProvider();
   await settings.load();

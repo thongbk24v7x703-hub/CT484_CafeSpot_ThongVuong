@@ -1,11 +1,20 @@
+import 'package:flutter/foundation.dart';
+
 import '../models/cafe.dart';
 import '../models/review.dart';
 import 'database_helper.dart';
+import 'memory_store.dart';
 
 class CafeRepository {
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
+  final MemoryStore _memory = MemoryStore.instance;
+
+  bool get _useMemory => kIsWeb;
 
   Future<List<Cafe>> getCafes({String? query, String? category}) async {
+    if (_useMemory) {
+      return _memory.getCafes(query: query, category: category);
+    }
     final db = await _dbHelper.database;
     final where = <String>[];
     final args = <Object?>[];
@@ -30,6 +39,7 @@ class CafeRepository {
   }
 
   Future<List<Cafe>> getFavorites() async {
+    if (_useMemory) return _memory.getFavorites();
     final db = await _dbHelper.database;
     final maps = await db.query(
       'cafes',
@@ -40,6 +50,7 @@ class CafeRepository {
   }
 
   Future<Cafe?> getCafeById(int id) async {
+    if (_useMemory) return _memory.getCafeById(id);
     final db = await _dbHelper.database;
     final maps = await db.query('cafes', where: 'id = ?', whereArgs: [id]);
     if (maps.isEmpty) return null;
@@ -47,11 +58,16 @@ class CafeRepository {
   }
 
   Future<int> insertCafe(Cafe cafe) async {
+    if (_useMemory) return _memory.insertCafe(cafe);
     final db = await _dbHelper.database;
     return db.insert('cafes', cafe.toMap()..remove('id'));
   }
 
   Future<int> updateCafe(Cafe cafe) async {
+    if (_useMemory) {
+      _memory.updateCafe(cafe);
+      return 1;
+    }
     final db = await _dbHelper.database;
     return db.update(
       'cafes',
@@ -62,12 +78,20 @@ class CafeRepository {
   }
 
   Future<int> deleteCafe(int id) async {
+    if (_useMemory) {
+      _memory.deleteCafe(id);
+      return 1;
+    }
     final db = await _dbHelper.database;
     await db.delete('reviews', where: 'cafe_id = ?', whereArgs: [id]);
     return db.delete('cafes', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> toggleFavorite(int id, bool value) async {
+    if (_useMemory) {
+      _memory.toggleFavorite(id, value);
+      return;
+    }
     final db = await _dbHelper.database;
     await db.update(
       'cafes',
@@ -78,6 +102,7 @@ class CafeRepository {
   }
 
   Future<List<Review>> getReviewsForCafe(int cafeId) async {
+    if (_useMemory) return _memory.getReviewsForCafe(cafeId);
     final db = await _dbHelper.database;
     final maps = await db.query(
       'reviews',
@@ -89,12 +114,14 @@ class CafeRepository {
   }
 
   Future<List<Review>> getAllReviews() async {
+    if (_useMemory) return _memory.getAllReviews();
     final db = await _dbHelper.database;
     final maps = await db.query('reviews', orderBy: 'created_at DESC');
     return maps.map(Review.fromMap).toList();
   }
 
   Future<int> insertReview(Review review) async {
+    if (_useMemory) return _memory.insertReview(review);
     final db = await _dbHelper.database;
     final id = await db.insert('reviews', review.toMap()..remove('id'));
     await _recalcCafeRating(review.cafeId);
@@ -102,6 +129,10 @@ class CafeRepository {
   }
 
   Future<int> deleteReview(int id, int cafeId) async {
+    if (_useMemory) {
+      _memory.deleteReview(id, cafeId);
+      return 1;
+    }
     final db = await _dbHelper.database;
     final result = await db.delete('reviews', where: 'id = ?', whereArgs: [id]);
     await _recalcCafeRating(cafeId);
