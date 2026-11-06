@@ -78,6 +78,8 @@ lib/
 
 ## Hướng dẫn cài đặt
 
+Xem [hướng dẫn chạy trên máy khác](HUONG_DAN_CHAY_MAY_KHAC.md) để chuẩn bị SDK, JDK và cấu hình máy nhận.
+
 ### 1) Cài Flutter
 
 ```bash
@@ -128,7 +130,7 @@ emulator -avd CafeSpot_Lite -no-audio -no-boot-anim -gpu swiftshader_indirect -m
 flutter devices
 
 # Android emulator / máy thật
-flutter run -d android
+flutter run -d <ID_THIET_BI>
 
 # Hoặc Chrome (xem UI nhanh)
 flutter run -d chrome
@@ -167,7 +169,7 @@ flutter build apk --debug
 | Chi tiết quán | `docs/screenshots/android/detail.png` |
 | Form thêm quán | `docs/screenshots/android/form.png` |
 
-Báo cáo cá nhân (đã chèn ảnh): `docs/Baocao_BK24V7X703_LuuMinhThong.docx`, `docs/Baocao_DC24V7X414_NguyenQuocVuong.docx`.
+Hai báo cáo cá nhân được tạo bằng `docs/build_final_reports.py` với tên `Baocao_BK24V7X703_LuuMinhThong.docx` và `Baocao_DC24V7X414_NguyenQuocVuong.docx`.
 
 ---
 

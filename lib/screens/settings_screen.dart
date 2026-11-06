@@ -88,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: const Icon(Icons.groups_outlined),
               title: const Text('Nhóm thực hiện'),
               subtitle: const Text(
-                'BK24V7X703 Lưu Minh Thông\nDC24V7X414 Nguyễn Quốc Vương',
+                'Lưu Minh Thông · BK24V7X703\nNguyễn Quốc Vương · DC24V7X414',
               ),
               isThreeLine: true,
             ),

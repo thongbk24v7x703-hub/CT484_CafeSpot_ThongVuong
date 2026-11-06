@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Crop real screenshots and insert into personal report DOCX files."""
+"""Crop app screenshots and insert them into personal report DOCX files."""
 from __future__ import annotations
 
 from pathlib import Path
