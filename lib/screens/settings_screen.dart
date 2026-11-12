@@ -5,7 +5,6 @@ import '../providers/settings_provider.dart';
 import '../services/notification_service.dart';
 import '../widgets/responsive_center.dart';
 
-/// Cài đặt & thông báo — phụ trách: Nguyễn Quốc Vương
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 

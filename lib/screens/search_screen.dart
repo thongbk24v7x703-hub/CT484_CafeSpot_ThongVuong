@@ -6,7 +6,6 @@ import '../providers/cafe_provider.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/responsive_center.dart';
 
-/// Tìm kiếm quán — phụ trách: Nguyễn Quốc Vương
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, this.initialQuery = ''});
 
@@ -61,7 +60,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 border: const OutlineInputBorder(),
               ),
               onChanged: (value) => provider.setFilter(query: value),
-              onSubmitted: (value) => provider.setFilter(query: value),
             ),
             const SizedBox(height: 12),
             Expanded(
@@ -69,13 +67,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? const Center(child: Text('Không tìm thấy kết quả.'))
                   : ListView.separated(
                       itemCount: provider.cafes.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      separatorBuilder: (_, _) => const Divider(height: 1),
                       itemBuilder: (context, index) {
                         final cafe = provider.cafes[index];
                         return ListTile(
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage(cafe.imageUrl),
-                            onBackgroundImageError: (_, __) {},
+                            onBackgroundImageError: (_, _) {},
                             child: const Icon(Icons.coffee),
                           ),
                           title: Text(cafe.name),

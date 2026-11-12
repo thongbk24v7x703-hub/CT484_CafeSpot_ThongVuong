@@ -8,7 +8,6 @@ import '../providers/settings_provider.dart';
 import '../services/notification_service.dart';
 import '../widgets/responsive_center.dart';
 
-/// Form thêm/sửa quán — phụ trách: Lưu Minh Thông
 class CafeFormScreen extends StatefulWidget {
   const CafeFormScreen({super.key, this.cafe});
 

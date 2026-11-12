@@ -1,7 +1,6 @@
 import '../models/cafe.dart';
 import '../models/review.dart';
 
-/// In-memory store cho web (sqflite không hỗ trợ browser).
 class MemoryStore {
   MemoryStore._() {
     _seed();

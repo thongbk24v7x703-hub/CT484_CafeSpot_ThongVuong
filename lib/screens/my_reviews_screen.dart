@@ -7,7 +7,6 @@ import '../providers/cafe_provider.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/responsive_center.dart';
 
-/// Tất cả đánh giá đã viết — phụ trách: Nguyễn Quốc Vương
 class MyReviewsScreen extends StatelessWidget {
   const MyReviewsScreen({super.key});
 
@@ -24,7 +23,7 @@ class MyReviewsScreen extends StatelessWidget {
             ? const Center(child: Text('Bạn chưa viết đánh giá nào.'))
             : ListView.separated(
                 itemCount: reviews.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                separatorBuilder: (_, _) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final review = reviews[index];
                   return Card(

@@ -9,13 +9,11 @@ class CafeCard extends StatelessWidget {
     required this.cafe,
     required this.onTap,
     this.onFavorite,
-    this.compact = false,
   });
 
   final Cafe cafe;
   final VoidCallback onTap;
   final VoidCallback? onFavorite;
-  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +27,14 @@ class CafeCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: compact ? 3 : 4,
+              flex: 4,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   Image.network(
                     cafe.imageUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (_, _, _) => Container(
                       color: theme.colorScheme.secondaryContainer,
                       child: const Icon(Icons.coffee, size: 48),
                     ),

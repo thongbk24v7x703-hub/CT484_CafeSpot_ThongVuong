@@ -6,7 +6,6 @@ import '../providers/cafe_provider.dart';
 import '../widgets/cafe_card.dart';
 import '../widgets/responsive_center.dart';
 
-/// Màn hình chính — phụ trách: Lưu Minh Thông
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -20,7 +19,10 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: 'Tìm kiếm',
-            onPressed: () => context.push('/search'),
+            onPressed: () async {
+              await context.push('/search');
+              provider.setFilter(query: '');
+            },
             icon: const Icon(Icons.search),
           ),
         ],

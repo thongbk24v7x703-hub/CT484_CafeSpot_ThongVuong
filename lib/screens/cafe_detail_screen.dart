@@ -11,7 +11,6 @@ import '../services/notification_service.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/responsive_center.dart';
 
-/// Chi tiết quán + review — phụ trách: Lưu Minh Thông (form review hỗ trợ Vương)
 class CafeDetailScreen extends StatefulWidget {
   const CafeDetailScreen({super.key, required this.cafeId});
 
@@ -54,12 +53,11 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
 
   Future<void> _submitReview() async {
     if (_cafe == null || _contentCtrl.text.trim().isEmpty) return;
-    final author = context.read<SettingsProvider>().displayName;
     final settings = context.read<SettingsProvider>();
     await context.read<CafeProvider>().addReview(
           Review(
             cafeId: _cafe!.id!,
-            author: author,
+            author: settings.displayName,
             content: _contentCtrl.text.trim(),
             rating: _rating,
             createdAt: DateTime.now(),
@@ -140,7 +138,7 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
                 child: Image.network(
                   cafe.imageUrl,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (_, _, _) => Container(
                     color: Theme.of(context).colorScheme.secondaryContainer,
                     child: const Icon(Icons.coffee, size: 64),
                   ),

@@ -4,7 +4,6 @@ import '../data/cafe_repository.dart';
 import '../models/cafe.dart';
 import '../models/review.dart';
 
-/// State chính của dữ liệu quán — phụ trách: Lưu Minh Thông
 class CafeProvider extends ChangeNotifier {
   CafeProvider(this._repo);
 

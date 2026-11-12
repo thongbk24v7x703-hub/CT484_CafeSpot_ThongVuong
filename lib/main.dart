@@ -13,19 +13,13 @@ Future<void> main() async {
   try {
     await NotificationService.instance.init();
   } catch (_) {
-    // Web / desktop chưa cấu hình plugin notification vẫn chạy UI.
   }
-
-  final settings = SettingsProvider();
-  await settings.load();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: settings),
-        ChangeNotifierProvider(
-          create: (_) => CafeProvider(CafeRepository())..load(),
-        ),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => CafeProvider(CafeRepository())),
       ],
       child: const CafeSpotApp(),
     ),

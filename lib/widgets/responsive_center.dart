@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Bố cục responsive cơ bản theo chiều rộng màn hình.
 class ResponsiveCenter extends StatelessWidget {
   const ResponsiveCenter({
     super.key,

@@ -168,8 +168,8 @@ flutter build apk --debug
 | Cài đặt | `docs/screenshots/android/settings.png` |
 | Chi tiết quán | `docs/screenshots/android/detail.png` |
 | Form thêm quán | `docs/screenshots/android/form.png` |
-
-Hai báo cáo cá nhân được tạo bằng `docs/build_final_reports.py` với tên `Baocao_BK24V7X703_LuuMinhThong.docx` và `Baocao_DC24V7X414_NguyenQuocVuong.docx`.
+| NavigationRail (màn rộng) | `docs/screenshots/android/rail.png` |
+| Thông báo cục bộ | `docs/screenshots/android/notify.png` |
 
 ---
 

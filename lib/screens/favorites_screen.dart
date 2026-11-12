@@ -6,7 +6,6 @@ import '../providers/cafe_provider.dart';
 import '../widgets/cafe_card.dart';
 import '../widgets/responsive_center.dart';
 
-/// Danh sách yêu thích — phụ trách: Nguyễn Quốc Vương
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
 

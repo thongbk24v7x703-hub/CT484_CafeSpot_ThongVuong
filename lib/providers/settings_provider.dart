@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Cài đặt người dùng — phụ trách: Nguyễn Quốc Vương
 class SettingsProvider extends ChangeNotifier {
   static const _keyDark = 'dark_mode';
   static const _keyNoti = 'notifications_enabled';
