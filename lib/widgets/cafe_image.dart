@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Ảnh quán: hỗ trợ asset nội bộ (`assets/...`) hoặc URL mạng.
+import '../utils/local_file.dart';
+
+/// Ảnh quán: hỗ trợ asset nội bộ, URL mạng, hoặc file trên máy.
 class CafeImage extends StatelessWidget {
   const CafeImage({
     super.key,
@@ -19,6 +21,19 @@ class CafeImage extends StatelessWidget {
 
   static bool isAsset(String value) =>
       value.startsWith('assets/') || value.startsWith('asset:');
+
+  static bool isNetwork(String value) {
+    final v = value.trim().toLowerCase();
+    return v.startsWith('http://') || v.startsWith('https://');
+  }
+
+  static bool isFile(String value) {
+    final v = value.trim();
+    if (v.isEmpty || isAsset(v) || isNetwork(v)) return false;
+    if (v.startsWith('file:')) return true;
+    if (v.startsWith('/')) return true;
+    return RegExp(r'^[a-zA-Z]:[\\/]').hasMatch(v);
+  }
 
   static String normalizeAsset(String value) =>
       value.startsWith('asset:') ? value.substring(6) : value;
@@ -42,7 +57,17 @@ class CafeImage extends StatelessWidget {
         fit: fit,
         width: width,
         height: height,
-        errorBuilder: (_, __, ___) => fallback(),
+        errorBuilder: (_, _, _) => fallback(),
+      );
+    }
+
+    if (isFile(source)) {
+      return buildLocalFileImage(
+        path: source,
+        fit: fit,
+        width: width,
+        height: height,
+        fallback: fallback,
       );
     }
 
@@ -51,13 +76,14 @@ class CafeImage extends StatelessWidget {
       fit: fit,
       width: width,
       height: height,
-      errorBuilder: (_, __, ___) => fallback(),
+      errorBuilder: (_, _, _) => fallback(),
     );
   }
 
   static ImageProvider? providerOf(String source) {
     if (source.trim().isEmpty) return null;
     if (isAsset(source)) return AssetImage(normalizeAsset(source));
+    if (isFile(source)) return localFileProvider(source);
     return NetworkImage(source);
   }
 }

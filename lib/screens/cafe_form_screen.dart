@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../models/cafe.dart';
 import '../providers/cafe_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/notification_service.dart';
+import '../utils/local_file.dart';
+import '../widgets/cafe_image.dart';
 import '../widgets/responsive_center.dart';
 
 /// Form thêm/sửa quán — phụ trách: Lưu Minh Thông
@@ -26,6 +29,7 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
   late final TextEditingController _imageUrl;
   late String _category;
   bool _saving = false;
+  bool _picking = false;
 
   bool get _isEdit => widget.cafe != null;
 
@@ -39,6 +43,7 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
     _imageUrl = TextEditingController(
       text: cafe?.imageUrl ?? 'assets/images/cafe1.png',
     );
+    _imageUrl.addListener(() => setState(() {}));
     _category = cafe?.category ?? 'Local';
   }
 
@@ -49,6 +54,38 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
     _description.dispose();
     _imageUrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    if (!supportsLocalFiles) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Chọn file chưa hỗ trợ trên web. Hãy dán link https://...'),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _picking = true);
+    try {
+      final picked = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 1600,
+        imageQuality: 85,
+      );
+      if (picked == null) return;
+
+      final destPath = await persistPickedImage(picked.path);
+      if (!mounted) return;
+      setState(() => _imageUrl.text = destPath);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Không chọn được ảnh: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _picking = false);
+    }
   }
 
   Future<void> _save() async {
@@ -81,6 +118,8 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final imageSource = _imageUrl.text.trim();
+
     return Scaffold(
       appBar: AppBar(title: Text(_isEdit ? 'Sửa quán' : 'Thêm quán')),
       body: ResponsiveCenter(
@@ -107,15 +146,50 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
                 validator: (v) => v == null || v.trim().isEmpty ? 'Nhập mô tả' : null,
               ),
               const SizedBox(height: 12),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: CafeImage(source: imageSource, fit: BoxFit.cover),
+                ),
+              ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _imageUrl,
                 decoration: const InputDecoration(
-                  labelText: 'Đường dẫn ảnh',
-                  hintText: 'assets/images/cafe1.png hoặc URL https://...',
+                  labelText: 'Đường dẫn / link ảnh',
+                  hintText: 'assets/images/cafe1.png hoặc https://...',
                   border: OutlineInputBorder(),
+                  helperText: 'Nhập link/URL hoặc chọn ảnh từ máy',
                 ),
                 validator: (v) =>
-                    v == null || v.trim().isEmpty ? 'Nhập đường dẫn ảnh' : null,
+                    v == null || v.trim().isEmpty ? 'Nhập đường dẫn ảnh hoặc chọn file' : null,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _picking ? null : () => _pickImage(ImageSource.gallery),
+                      icon: _picking
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.photo_library_outlined),
+                      label: const Text('Chọn từ thư viện'),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _picking ? null : () => _pickImage(ImageSource.camera),
+                      icon: const Icon(Icons.photo_camera_outlined),
+                      label: const Text('Chụp ảnh'),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
