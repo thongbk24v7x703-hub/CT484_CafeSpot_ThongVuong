@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/cafe.dart';
+import 'cafe_image.dart';
 import 'rating_stars.dart';
 
 class CafeCard extends StatelessWidget {
@@ -33,14 +34,7 @@ class CafeCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    cafe.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      color: theme.colorScheme.secondaryContainer,
-                      child: const Icon(Icons.coffee, size: 48),
-                    ),
-                  ),
+                  CafeImage(source: cafe.imageUrl, fit: BoxFit.cover),
                   if (onFavorite != null)
                     Positioned(
                       top: 8,

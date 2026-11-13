@@ -78,7 +78,7 @@ Mã hiện tại dùng SQLite trên Android và SharedPreferences cho cài đặ
 Dự án hoạt động với dữ liệu cục bộ, không cần .env, API key hoặc tài khoản máy chủ.
 cafe_spot.db được tạo và nạp bốn quán mẫu khi mở ứng dụng lần đầu.
 Mỗi thiết bị có dữ liệu riêng. Dữ liệu quán, đánh giá và cài đặt đang có trên thiết bị của máy gửi không tự chuyển trong ZIP.
-Ảnh quán tải từ picsum.photos.
+Ảnh quán mẫu dùng file tĩnh trong `assets/images/cafe1.png` … `cafe4.png` (không phụ thuộc mạng).
 
 ## Nền tảng khác
 

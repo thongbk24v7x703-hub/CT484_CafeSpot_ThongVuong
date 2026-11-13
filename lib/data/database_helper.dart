@@ -19,7 +19,7 @@ class DatabaseHelper {
     final path = join(dbPath, 'cafe_spot.db');
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE cafes (
@@ -47,6 +47,29 @@ class DatabaseHelper {
         ''');
         await _seed(db);
       },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Đổi ảnh seed từ picsum (hay timeout) sang asset tĩnh.
+          const mapping = {
+            'The Coffee House': 'assets/images/cafe1.png',
+            'Cộng Cà Phê': 'assets/images/cafe2.png',
+            'Highland Coffee': 'assets/images/cafe3.png',
+            'Garden Beans': 'assets/images/cafe4.png',
+          };
+          for (final entry in mapping.entries) {
+            await db.update(
+              'cafes',
+              {'image_url': entry.value},
+              where: 'name = ?',
+              whereArgs: [entry.key],
+            );
+          }
+          await db.rawUpdate(
+            "UPDATE cafes SET image_url = 'assets/images/cafe1.png' "
+            "WHERE image_url LIKE '%picsum.photos%'",
+          );
+        }
+      },
     );
   }
 
@@ -57,7 +80,7 @@ class DatabaseHelper {
         'name': 'The Coffee House',
         'address': 'Ninh Kiều, Cần Thơ',
         'description': 'Không gian rộng, wifi ổn định, phù hợp học nhóm.',
-        'image_url': 'https://picsum.photos/seed/cafe1/800/500',
+        'image_url': 'assets/images/cafe1.png',
         'rating': 4.5,
         'category': 'Chuỗi',
         'is_favorite': 1,
@@ -67,7 +90,7 @@ class DatabaseHelper {
         'name': 'Cộng Cà Phê',
         'address': 'Xuân Khánh, Cần Thơ',
         'description': 'Phong cách hoài cổ, đồ uống đậm đà.',
-        'image_url': 'https://picsum.photos/seed/cafe2/800/500',
+        'image_url': 'assets/images/cafe2.png',
         'rating': 4.2,
         'category': 'Specialty',
         'is_favorite': 0,
@@ -77,7 +100,7 @@ class DatabaseHelper {
         'name': 'Highland Coffee',
         'address': 'Cái Răng, Cần Thơ',
         'description': 'View sông, bàn ngoài trời thoáng mát.',
-        'image_url': 'https://picsum.photos/seed/cafe3/800/500',
+        'image_url': 'assets/images/cafe3.png',
         'rating': 4.0,
         'category': 'Chuỗi',
         'is_favorite': 0,
@@ -87,7 +110,7 @@ class DatabaseHelper {
         'name': 'Garden Beans',
         'address': 'An Khánh, Ninh Kiều',
         'description': 'Quán nhỏ yên tĩnh, phù hợp làm việc cá nhân.',
-        'image_url': 'https://picsum.photos/seed/cafe4/800/500',
+        'image_url': 'assets/images/cafe4.png',
         'rating': 4.7,
         'category': 'Local',
         'is_favorite': 1,

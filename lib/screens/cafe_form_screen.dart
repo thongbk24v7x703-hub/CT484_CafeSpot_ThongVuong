@@ -37,8 +37,7 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
     _address = TextEditingController(text: cafe?.address ?? '');
     _description = TextEditingController(text: cafe?.description ?? '');
     _imageUrl = TextEditingController(
-      text: cafe?.imageUrl ??
-          'https://picsum.photos/seed/${DateTime.now().millisecondsSinceEpoch}/800/500',
+      text: cafe?.imageUrl ?? 'assets/images/cafe1.png',
     );
     _category = cafe?.category ?? 'Local';
   }
@@ -110,8 +109,13 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: _imageUrl,
-                decoration: const InputDecoration(labelText: 'URL ảnh', border: OutlineInputBorder()),
-                validator: (v) => v == null || v.trim().isEmpty ? 'Nhập URL ảnh' : null,
+                decoration: const InputDecoration(
+                  labelText: 'Đường dẫn ảnh',
+                  hintText: 'assets/images/cafe1.png hoặc URL https://...',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (v) =>
+                    v == null || v.trim().isEmpty ? 'Nhập đường dẫn ảnh' : null,
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(

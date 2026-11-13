@@ -8,6 +8,7 @@ import '../models/review.dart';
 import '../providers/cafe_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/notification_service.dart';
+import '../widgets/cafe_image.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/responsive_center.dart';
 
@@ -137,13 +138,10 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
               borderRadius: BorderRadius.circular(16),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
-                child: Image.network(
-                  cafe.imageUrl,
+                child: CafeImage(
+                  source: cafe.imageUrl,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    child: const Icon(Icons.coffee, size: 64),
-                  ),
+                  errorIconSize: 64,
                 ),
               ),
             ),

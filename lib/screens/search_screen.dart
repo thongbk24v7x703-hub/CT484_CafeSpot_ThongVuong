@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cafe_provider.dart';
+import '../widgets/cafe_image.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/responsive_center.dart';
 
@@ -74,7 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         final cafe = provider.cafes[index];
                         return ListTile(
                           leading: CircleAvatar(
-                            backgroundImage: NetworkImage(cafe.imageUrl),
+                            backgroundImage: CafeImage.providerOf(cafe.imageUrl),
                             onBackgroundImageError: (_, __) {},
                             child: const Icon(Icons.coffee),
                           ),
