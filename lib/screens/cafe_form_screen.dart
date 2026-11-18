@@ -26,11 +26,16 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
   late final TextEditingController _address;
   late final TextEditingController _description;
   late final TextEditingController _imageUrl;
+  late final TextEditingController _openHours;
+  late final TextEditingController _phone;
   late String _category;
+  late String _priceRange;
   bool _saving = false;
   bool _picking = false;
 
   bool get _isEdit => widget.cafe != null;
+
+  static const _priceOptions = ['Bình dân', 'Trung bình', 'Cao'];
 
   @override
   void initState() {
@@ -43,7 +48,11 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
       text: cafe?.imageUrl ?? 'assets/images/cafe1.png',
     );
     _imageUrl.addListener(() => setState(() {}));
+    _openHours = TextEditingController(text: cafe?.openHours ?? '');
+    _phone = TextEditingController(text: cafe?.phone ?? '');
     _category = cafe?.category ?? 'Local';
+    final price = cafe?.priceRange ?? '';
+    _priceRange = _priceOptions.contains(price) ? price : 'Trung bình';
   }
 
   @override
@@ -52,6 +61,8 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
     _address.dispose();
     _description.dispose();
     _imageUrl.dispose();
+    _openHours.dispose();
+    _phone.dispose();
     super.dispose();
   }
 
@@ -101,6 +112,9 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
       category: _category,
       isFavorite: existing?.isFavorite ?? false,
       createdAt: existing?.createdAt ?? DateTime.now(),
+      openHours: _openHours.text.trim(),
+      phone: _phone.text.trim(),
+      priceRange: _priceRange,
     );
     final cafeProvider = context.read<CafeProvider>();
     final settings = context.read<SettingsProvider>();
@@ -136,6 +150,41 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
                 controller: _address,
                 decoration: const InputDecoration(labelText: 'Địa chỉ', border: OutlineInputBorder()),
                 validator: (v) => v == null || v.trim().isEmpty ? 'Nhập địa chỉ' : null,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _openHours,
+                      decoration: const InputDecoration(
+                        labelText: 'Giờ mở cửa',
+                        hintText: '07:00 - 22:00',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _phone,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        labelText: 'Số điện thoại',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (v) {
+                        final text = v?.trim() ?? '';
+                        if (text.isEmpty) return null;
+                        if (!RegExp(r'^[0-9 ]{9,13}$').hasMatch(text)) {
+                          return 'Số điện thoại không hợp lệ';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -199,6 +248,15 @@ class _CafeFormScreenState extends State<CafeFormScreen> {
                     .map((c) => DropdownMenuItem(value: c, child: Text(c)))
                     .toList(),
                 onChanged: (v) => setState(() => _category = v ?? 'Local'),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                initialValue: _priceRange,
+                decoration: const InputDecoration(labelText: 'Mức giá', border: OutlineInputBorder()),
+                items: _priceOptions
+                    .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+                    .toList(),
+                onChanged: (v) => setState(() => _priceRange = v ?? 'Trung bình'),
               ),
               const SizedBox(height: 20),
               FilledButton.icon(

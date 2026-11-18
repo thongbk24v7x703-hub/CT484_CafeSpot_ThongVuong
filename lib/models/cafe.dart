@@ -8,6 +8,9 @@ class Cafe {
   final String category;
   final bool isFavorite;
   final DateTime createdAt;
+  final String openHours;
+  final String phone;
+  final String priceRange;
 
   const Cafe({
     this.id,
@@ -19,6 +22,9 @@ class Cafe {
     required this.category,
     this.isFavorite = false,
     required this.createdAt,
+    this.openHours = '',
+    this.phone = '',
+    this.priceRange = '',
   });
 
   Cafe copyWith({
@@ -31,6 +37,9 @@ class Cafe {
     String? category,
     bool? isFavorite,
     DateTime? createdAt,
+    String? openHours,
+    String? phone,
+    String? priceRange,
   }) {
     return Cafe(
       id: id ?? this.id,
@@ -42,6 +51,9 @@ class Cafe {
       category: category ?? this.category,
       isFavorite: isFavorite ?? this.isFavorite,
       createdAt: createdAt ?? this.createdAt,
+      openHours: openHours ?? this.openHours,
+      phone: phone ?? this.phone,
+      priceRange: priceRange ?? this.priceRange,
     );
   }
 
@@ -56,6 +68,9 @@ class Cafe {
       'category': category,
       'is_favorite': isFavorite ? 1 : 0,
       'created_at': createdAt.toIso8601String(),
+      'open_hours': openHours,
+      'phone': phone,
+      'price_range': priceRange,
     };
   }
 
@@ -70,6 +85,9 @@ class Cafe {
       category: map['category'] as String,
       isFavorite: (map['is_favorite'] as int? ?? 0) == 1,
       createdAt: DateTime.parse(map['created_at'] as String),
+      openHours: map['open_hours'] as String? ?? '',
+      phone: map['phone'] as String? ?? '',
+      priceRange: map['price_range'] as String? ?? '',
     );
   }
 }

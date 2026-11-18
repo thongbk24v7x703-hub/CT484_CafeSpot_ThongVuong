@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/local_file.dart';
 
-/// Ảnh quán: hỗ trợ asset nội bộ, URL mạng, hoặc file trên máy.
 class CafeImage extends StatelessWidget {
   const CafeImage({
     super.key,

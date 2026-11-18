@@ -17,6 +17,20 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('CafeSpot'),
         actions: [
+          PopupMenuButton<String>(
+            tooltip: 'Sắp xếp',
+            icon: const Icon(Icons.sort),
+            onSelected: provider.setSort,
+            itemBuilder: (context) => CafeProvider.sortOptions.entries
+                .map(
+                  (e) => CheckedPopupMenuItem(
+                    value: e.key,
+                    checked: provider.sort == e.key,
+                    child: Text(e.value),
+                  ),
+                )
+                .toList(),
+          ),
           IconButton(
             tooltip: 'Tìm kiếm',
             onPressed: () async {
@@ -44,7 +58,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Danh sách quán lưu cục bộ bằng SQLite — thêm, sửa, xóa và đánh giá.',
+              'Chọn quán, xem đánh giá và lưu lại quán bạn thích.',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 12),
@@ -73,22 +87,30 @@ class HomeScreen extends StatelessWidget {
                       : LayoutBuilder(
                           builder: (context, constraints) {
                             final count = gridCountForWidth(constraints.maxWidth);
-                            return GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: count,
-                                mainAxisSpacing: 12,
-                                crossAxisSpacing: 12,
-                                childAspectRatio: count == 1 ? 1.35 : 0.78,
+                            return RefreshIndicator(
+                              onRefresh: () => provider.load(showLoading: false),
+                              child: GridView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: count,
+                                  mainAxisSpacing: 12,
+                                  crossAxisSpacing: 12,
+                                  childAspectRatio: count == 1 ? 1.35 : 0.78,
+                                ),
+                                itemCount: provider.cafes.length,
+                                itemBuilder: (context, index) {
+                                  final cafe = provider.cafes[index];
+                                  return CafeCard(
+                                    cafe: cafe,
+                                    heroTag: 'cafe-${cafe.id}',
+                                    onTap: () => context.push(
+                                      '/cafe/${cafe.id}',
+                                      extra: cafe,
+                                    ),
+                                    onFavorite: () => provider.toggleFavorite(cafe),
+                                  );
+                                },
                               ),
-                              itemCount: provider.cafes.length,
-                              itemBuilder: (context, index) {
-                                final cafe = provider.cafes[index];
-                                return CafeCard(
-                                  cafe: cafe,
-                                  onTap: () => context.push('/cafe/${cafe.id}'),
-                                  onFavorite: () => provider.toggleFavorite(cafe),
-                                );
-                              },
                             );
                           },
                         ),

@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../models/cafe.dart';
 import '../screens/cafe_detail_screen.dart';
 import '../screens/cafe_form_screen.dart';
+import '../screens/collection_detail_screen.dart';
+import '../screens/collections_screen.dart';
 import '../screens/favorites_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/my_reviews_screen.dart';
@@ -118,7 +120,27 @@ GoRouter createAppRouter() {
           return _fadeSlide(
             context: context,
             state: state,
-            child: CafeDetailScreen(cafeId: id),
+            child: CafeDetailScreen(cafeId: id, cafe: state.extra as Cafe?),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/collections',
+        pageBuilder: (context, state) => _fadeSlide(
+          context: context,
+          state: state,
+          child: const CollectionsScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/collections/:id',
+        pageBuilder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          final name = state.uri.queryParameters['name'] ?? 'Bộ sưu tập';
+          return _fadeSlide(
+            context: context,
+            state: state,
+            child: CollectionDetailScreen(collectionId: id, name: name),
           );
         },
       ),

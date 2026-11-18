@@ -11,12 +11,14 @@ class CafeCard extends StatelessWidget {
     required this.onTap,
     this.onFavorite,
     this.compact = false,
+    this.heroTag,
   });
 
   final Cafe cafe;
   final VoidCallback onTap;
   final VoidCallback? onFavorite;
   final bool compact;
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,12 @@ class CafeCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CafeImage(source: cafe.imageUrl, fit: BoxFit.cover),
+                  heroTag == null
+                      ? CafeImage(source: cafe.imageUrl, fit: BoxFit.cover)
+                      : Hero(
+                          tag: heroTag!,
+                          child: CafeImage(source: cafe.imageUrl, fit: BoxFit.cover),
+                        ),
                   if (onFavorite != null)
                     Positioned(
                       top: 8,

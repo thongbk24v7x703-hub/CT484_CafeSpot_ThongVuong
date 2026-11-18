@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../models/cafe.dart';
+import '../models/cafe_collection.dart';
 import '../models/review.dart';
 import 'database_helper.dart';
 import 'memory_store.dart';
@@ -11,9 +13,13 @@ class CafeRepository {
 
   bool get _useMemory => kIsWeb;
 
-  Future<List<Cafe>> getCafes({String? query, String? category}) async {
+  Future<List<Cafe>> getCafes({
+    String? query,
+    String? category,
+    String sort = 'rating',
+  }) async {
     if (_useMemory) {
-      return _memory.getCafes(query: query, category: category);
+      return _memory.getCafes(query: query, category: category, sort: sort);
     }
     final db = await _dbHelper.database;
     final where = <String>[];
@@ -29,11 +35,15 @@ class CafeRepository {
       args.add(category);
     }
 
+    var orderBy = 'rating DESC, created_at DESC';
+    if (sort == 'name') orderBy = 'name COLLATE NOCASE ASC';
+    if (sort == 'new') orderBy = 'created_at DESC';
+
     final maps = await db.query(
       'cafes',
       where: where.isEmpty ? null : where.join(' AND '),
       whereArgs: args.isEmpty ? null : args,
-      orderBy: 'rating DESC, created_at DESC',
+      orderBy: orderBy,
     );
     return maps.map(Cafe.fromMap).toList();
   }
@@ -84,6 +94,7 @@ class CafeRepository {
     }
     final db = await _dbHelper.database;
     await db.delete('reviews', where: 'cafe_id = ?', whereArgs: [id]);
+    await db.delete('collection_cafes', where: 'cafe_id = ?', whereArgs: [id]);
     return db.delete('cafes', where: 'id = ?', whereArgs: [id]);
   }
 
@@ -137,6 +148,93 @@ class CafeRepository {
     final result = await db.delete('reviews', where: 'id = ?', whereArgs: [id]);
     await _recalcCafeRating(cafeId);
     return result;
+  }
+
+  Future<void> updateReview(Review review) async {
+    if (_useMemory) {
+      _memory.updateReview(review);
+      return;
+    }
+    final db = await _dbHelper.database;
+    await db.update(
+      'reviews',
+      review.toMap(),
+      where: 'id = ?',
+      whereArgs: [review.id],
+    );
+    await _recalcCafeRating(review.cafeId);
+  }
+
+  Future<List<CafeCollection>> getCollections() async {
+    if (_useMemory) return _memory.getCollections();
+    final db = await _dbHelper.database;
+    final maps = await db.rawQuery(
+      'SELECT c.id, c.name, c.created_at, COUNT(cc.cafe_id) AS cafe_count '
+      'FROM collections c '
+      'LEFT JOIN collection_cafes cc ON cc.collection_id = c.id '
+      'GROUP BY c.id ORDER BY c.created_at DESC',
+    );
+    return maps.map(CafeCollection.fromMap).toList();
+  }
+
+  Future<int> insertCollection(String name) async {
+    if (_useMemory) return _memory.insertCollection(name);
+    final db = await _dbHelper.database;
+    return db.insert('collections', {
+      'name': name,
+      'created_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  Future<void> deleteCollection(int id) async {
+    if (_useMemory) {
+      _memory.deleteCollection(id);
+      return;
+    }
+    final db = await _dbHelper.database;
+    await db.delete(
+      'collection_cafes',
+      where: 'collection_id = ?',
+      whereArgs: [id],
+    );
+    await db.delete('collections', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Cafe>> getCafesInCollection(int collectionId) async {
+    if (_useMemory) return _memory.getCafesInCollection(collectionId);
+    final db = await _dbHelper.database;
+    final maps = await db.rawQuery(
+      'SELECT cafes.* FROM cafes '
+      'JOIN collection_cafes cc ON cc.cafe_id = cafes.id '
+      'WHERE cc.collection_id = ? ORDER BY cafes.name COLLATE NOCASE ASC',
+      [collectionId],
+    );
+    return maps.map(Cafe.fromMap).toList();
+  }
+
+  Future<void> setCafeInCollection(
+    int collectionId,
+    int cafeId,
+    bool value,
+  ) async {
+    if (_useMemory) {
+      _memory.setCafeInCollection(collectionId, cafeId, value);
+      return;
+    }
+    final db = await _dbHelper.database;
+    if (value) {
+      await db.insert(
+        'collection_cafes',
+        {'collection_id': collectionId, 'cafe_id': cafeId},
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    } else {
+      await db.delete(
+        'collection_cafes',
+        where: 'collection_id = ? AND cafe_id = ?',
+        whereArgs: [collectionId, cafeId],
+      );
+    }
   }
 
   Future<void> _recalcCafeRating(int cafeId) async {
