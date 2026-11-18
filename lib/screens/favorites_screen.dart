@@ -14,7 +14,16 @@ class FavoritesScreen extends StatelessWidget {
     final favorites = context.watch<CafeProvider>().favorites;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Yêu thích')),
+      appBar: AppBar(
+        title: const Text('Yêu thích'),
+        actions: [
+          IconButton(
+            tooltip: 'Bộ sưu tập',
+            icon: const Icon(Icons.collections_bookmark_outlined),
+            onPressed: () => context.push('/collections'),
+          ),
+        ],
+      ),
       body: ResponsiveCenter(
         child: favorites.isEmpty
             ? const Center(
@@ -23,23 +32,28 @@ class FavoritesScreen extends StatelessWidget {
             : LayoutBuilder(
                 builder: (context, constraints) {
                   final count = gridCountForWidth(constraints.maxWidth);
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: count,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: count == 1 ? 1.35 : 0.78,
+                  return RefreshIndicator(
+                    onRefresh: () =>
+                        context.read<CafeProvider>().load(showLoading: false),
+                    child: GridView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: count,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: count == 1 ? 1.35 : 0.78,
+                      ),
+                      itemCount: favorites.length,
+                      itemBuilder: (context, index) {
+                        final cafe = favorites[index];
+                        return CafeCard(
+                          cafe: cafe,
+                          onTap: () => context.push('/cafe/${cafe.id}'),
+                          onFavorite: () =>
+                              context.read<CafeProvider>().toggleFavorite(cafe),
+                        );
+                      },
                     ),
-                    itemCount: favorites.length,
-                    itemBuilder: (context, index) {
-                      final cafe = favorites[index];
-                      return CafeCard(
-                        cafe: cafe,
-                        onTap: () => context.push('/cafe/${cafe.id}'),
-                        onFavorite: () =>
-                            context.read<CafeProvider>().toggleFavorite(cafe),
-                      );
-                    },
                   );
                 },
               ),

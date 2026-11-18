@@ -7,7 +7,6 @@ import '../widgets/cafe_image.dart';
 import '../widgets/rating_stars.dart';
 import '../widgets/responsive_center.dart';
 
-/// Tìm kiếm quán — phụ trách: Nguyễn Quốc Vương
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, this.initialQuery = ''});
 

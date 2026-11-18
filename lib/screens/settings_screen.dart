@@ -29,6 +29,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.dispose();
   }
 
+  Future<void> _saveName(SettingsProvider settings) async {
+    FocusScope.of(context).unfocus();
+    await settings.setDisplayName(_nameCtrl.text);
+    if (!mounted) return;
+    _nameCtrl.text = settings.displayName;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Đã lưu tên hiển thị')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
@@ -46,20 +56,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 labelText: 'Tên hiển thị khi đánh giá',
                 border: OutlineInputBorder(),
               ),
-              onSubmitted: settings.setDisplayName,
+              onSubmitted: (_) => _saveName(settings),
             ),
             const SizedBox(height: 8),
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton(
-                onPressed: () => settings.setDisplayName(_nameCtrl.text),
+                onPressed: () => _saveName(settings),
                 child: const Text('Lưu tên'),
               ),
             ),
             const Divider(height: 32),
             SwitchListTile(
               title: const Text('Chế độ tối'),
-              subtitle: const Text('Lưu bằng SharedPreferences'),
+              subtitle: const Text('Đổi giao diện sáng hoặc tối'),
               value: settings.darkMode,
               onChanged: settings.setDarkMode,
               secondary: const Icon(Icons.dark_mode_outlined),
